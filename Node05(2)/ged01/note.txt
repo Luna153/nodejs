@@ -1,0 +1,5 @@
+先在cmd安裝:npm i -g express-generator
+開新檔案 ged01 終端機:express -e
+安裝npm i->
+start 改nodemon
+npm start啟動nodemon

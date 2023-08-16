@@ -1,0 +1,29 @@
+body{
+    background-image: url(../images/cat.jpg);
+    background-size: cover;
+}
+.row{
+    display: flex;
+    width: 180px;
+}
+.col{
+    width : 60px ;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+.col:not(:first-child){
+    border-left: 1px solid #000;
+}
+.row:nth-child(odd){
+    background-color: #f4f8be;
+}
+.row:nth-child(even){
+    background-color: #e4ecf3;
+}
+.active{
+    background-color: #f7a474;
+    color: #ffffff;
+}

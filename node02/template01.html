@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template</title>
+    <style>
+        .row {
+            display: flex;
+            width: 180px;
+        }
+
+        .col {
+            width: 60px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            /* 滑鼠移過去有手指 */
+        }
+
+        .col:not(:first-child) {
+            border-left: 1px solid #000;
+        }
+
+        .row:nth-child(odd) {
+            /* 基數 */
+            background-color: #aebf98;
+        }
+
+        .row:nth-child(even) {
+            /* 偶數 */
+            background-color: #667653;
+        }
+
+        .active {
+            background-color: #c28d8d;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col">1-1</div>
+        <div class="col">1-2</div>
+        <div class="col">1-3</div>
+    </div>
+    <div class="row">
+        <div class="col">2-1</div>
+        <div class="col">2-2</div>
+        <div class="col">2-3</div>
+    </div>
+    <div class="row">
+        <div class="col">3-1</div>
+        <div class="col">3-2</div>
+        <div class="col">3-3</div>
+    </div>
+    <div class="row">
+        <div class="col">4-1</div>
+        <div class="col">4-2</div>
+        <div class="col">4-3</div>
+    </div>
+    <script>
+        const cols = document.querySelectorAll(".col");
+        // cols.forEach()
+        // 轉陣列方法*2
+        // Array.from(cols)
+        // 解構賦值[...]
+        // map陣列專用迴圈
+        [...cols].map(col => {
+            // console.log(col);
+
+            // function(){} vs ()=>{}
+            // 可以使用this vs this指向全域變數
+            col.addEventListener("click", function () {
+                //click增加active
+
+                // if (this.classList.contains("active")) {
+                //     this.classList.remove("active")
+                // } else {
+                //     this.classList.add("active")
+                // }
+
+                // 三元運算子()? : ;
+                (this.classList.contains("active"))
+                    ? this.classList.remove("active")
+                    : this.classList.add("active");
+            });
+        });
+    </script>
+</body>
+
+</html>
