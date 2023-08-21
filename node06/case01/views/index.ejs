@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>記帳軟體</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/all.min.css">
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+
+<body>
+  <div class="container mt-1">
+    <div class="input-group input-group-lg">
+      <div class="btn btn-primary input-group-text btn-prevDate abc">
+        <i class="fa-solid fa-chevron-left"></i>
+      </div>
+      <input type="date" class="form-control myDate" value="<%=date%>">
+      <div class="btn btn-primary input-group-text btn-nextDate">
+        <i class="fa-solid fa-chevron-right"></i>
+      </div>
+      <div class="btn btn-primary input-group-text btn-add">
+        <i class="fa-solid fa-pencil"></i>
+      </div>
+    </div>
+
+    <div class="unit bg-primary mt-2 text-white rounded-top">
+      <div class="sn text-center fs-5">SN</div>
+      <div class="title fs-5">TITLE</div>
+      <div class="sort fs-5">SORT</div>
+      <div class="money fs-5">MONEY</div>
+    </div>
+    <% let totalMoney=0; dateData.forEach((item, index)=>{
+      let a = sort.filter((st)=>{
+      return st.id === item.sort
+      });
+      totalMoney+=item.money
+      %>
+      <div class="unit list" title="<%=item.title%>" sort=" <%=item.sort%>" money="<%=item.money%>" idn=" <%=item.id%>">
+        <div class="sn text-center">
+          <%=index+1%>
+        </div>
+        <div class="title">
+          <%=item.title%>
+        </div>
+        <div class="sort">
+          <%=a[0].name%>
+        </div>
+        <div class="money text-end pe-2">
+          <%=item.money%>
+        </div>
+      </div>
+
+      <%});%>
+        <div class="bg-primary text-white p-1 rounded-bottom">
+          <div class="fs-1 text-end">
+            <%=totalMoney%>
+          </div>
+        </div>
+  </div>
+
+  <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="inputArea">
+    <!--  data-bs-backdrop="static"  offcanvas打開按右邊黑色不會關掉 -->
+    <div class="offcanvas-header d-flex">
+      <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <form action="/expe" method="post">
+        <div class="input-group input-group-lg mb-2">
+          <span class="input-group-text">消費內容</span>
+          <input type="text" class="form-control" name="title">
+        </div>
+        <div class="input-group input-group-lg mb-2">
+          <span class="input-group-text">消費金額</span>
+          <input type="text" class="form-control" name="money">
+        </div>
+        <div class="input-group input-group-lg mb-2">
+          <span class="input-group-text">消費分類</span>
+          <select name="sort" class="form-control" id="">
+            <option value selected disabled>請選擇</option>
+            <%sort.forEach(item=>{%>
+              <option value="<%=item.id%>">
+                <%=item.name%>
+              </option>
+              <%})%>
+          </select>
+        </div>
+        <div class="d-flex newSet">
+          <div type="submit" class="btn btn-lg ms-auto btn-primary btn-send">送出</div>
+          <div class="btn btn-lg btn-warning ms-2 btn-cancel" data-bs-dismiss="offcanvas">取消</div>
+        </div>
+        <div class="d-none updateSet">
+          <div class="btn btn-lg btn-danger btn-del">刪除</div>
+          <div class="btn btn-lg ms-auto btn-primary btn-update">修改</div>
+          <div class="btn btn-lg btn-warning ms-2 btn-cancel" data-bs-dismiss="offcanvas">取消</div>
+        </div>
+        <input type="hidden" name="date" value="<%=date%>">
+        <input type="hidden" name="id">
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/bootstrap.bundle.js"></script>
+  <script>
+    const btnPrevDate = document.querySelector(".btn-prevDate")
+    const btnNextDate = document.querySelector(".btn-nextDate")
+    const myDate = document.querySelector(".myDate")
+    const bsOffcanvas = new bootstrap.Offcanvas('#inputArea')
+    const btnAdd = document.querySelector(".btn-add")
+    const btnSend = document.querySelector(".btn-send")
+    const form1 = document.querySelector("form")
+    const lists = document.querySelectorAll(".list");
+    const newSet = document.querySelector(".newSet");
+    const updateSet = document.querySelector(".updateSet");
+    const btnUpdate = document.querySelector(".btn-update")
+    const btnDel = document.querySelector(".btn-del")
+
+    btnDel.addEventListener("click", (e) => {
+      let url = "/expe";
+      let form2 = document.querySelector("form");
+      let formData = new FormData(form2);
+      // for(let [key, value] of formData.entiries()){
+      // es6 迴圈新寫法
+      // console.log(`${key}: ${value}`)
+      fetch(url, {
+        method: "DELETE",
+        body: formData
+      }).then((response) => {
+        return response.json()
+      }).then((result) => {
+        console.log(result)
+      }).catch((error) => {
+        console.log(error)
+      })
+    });
+
+    btnUpdate.addEventListener("click", (e) => {
+      let url = "/expe";
+      let form2 = document.querySelector("form");
+      let formData = new FormData(form2);
+      // for(let [key, value] of formData.entiries()){
+      // es6 迴圈新寫法
+      // console.log(`${key}: ${value}`)
+      fetch(url, {
+        method: "PUT",
+        body: formData
+      }).then((response) => {
+        return response.json()
+      }).then((result) => {
+        console.log(result)
+      }).catch((error) => {
+        console.log(error)
+      })
+    });
+  
+
+    lists.forEach(list => {
+      list.addEventListener("click", (e) => {
+        let id = e.currentTarget.getAttribute("id");
+        let title = e.currentTarget.getAttribute("title");
+        let sort = e.currentTarget.getAttribute("sort");
+        let money = e.currentTarget.getAttribute("money");
+        document.querySelector("[name=id]").value = id;
+        document.querySelector("[name=title]").value = title;
+        document.querySelector("[name=money]").value = money;
+        document.querySelector("select").selectedIndex = sort;
+        newSet.classList.add("d-none");
+        newSet.classList.remove("d-flex");
+        updateSet.classList.remove("d-none");
+        updateSet.classList.add("d-flex");
+        // alert("AA")
+        bsOffcanvas.show();
+      })
+    });
+
+
+    btnSend.addEventListener("click", (e) => {
+      //把 .btn-send button標籤改成div 用 js 方法寫入 form 表單
+      form1.submit();
+    })
+
+
+
+    btnAdd.addEventListener("click", (e) => {
+      document.querySelector("[name=id]").value = "";
+      document.querySelector("[name=title]").value = "";
+      document.querySelector("[name=money]").value = "";
+      document.querySelector("select").selectedIndex = 0;
+      updateSet.classList.add("d-none");
+      updateSet.classList.remove("d-flex");
+      newSet.classList.remove("d-none");
+      newSet.classList.add("d-flex");
+      bsOffcanvas.show();
+    })
+
+    myDate.addEventListener("change", (e) => {
+      // e.currentTarget = this
+      let date = e.currentTarget.value;
+      window.location.href = `/expe/d/${date}`;
+      //input 選擇日期 網址會跟著改變
+    })
+
+    btnPrevDate.addEventListener("click", () => {
+      let date = new Date(myDate.value);
+      date.setDate(date.getDate() - 1);
+      let dateStr = date.toISOString().split("T")[0];
+      window.location.href = `/expe/d/${dateStr}`
+    })
+
+    btnNextDate.addEventListener("click", () => {
+      let date = new Date(myDate.value);
+      date.setDate(date.getDate() + 1);
+      let dateStr = date.toISOString().split("T")[0];
+      window.location.href = `/expe/d/${dateStr}`
+    })
+  </script>
+</body>
+
+</html>
