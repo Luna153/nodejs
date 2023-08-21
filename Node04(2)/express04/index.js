@@ -7,12 +7,15 @@ app.get("/", (req,res)=>{
 })
 app.get("/p/:id/",(req,res)=>{
     let id = req.params.id;
+    // :id 和 req.params.id 搭配使用
     res.setHeader("content-type", "text/html;charset=utf-8")
     let pageName = "";
     if(id === "CvZP-PIguWG"){
         pageName = "《浅草で一番おすすめしたい抹茶クレープ(The most recommended matcha crepe in Asakusa)》"
     }else if(id === "CvRz0e3Awmi"){
         pageName ="《ぷるんぷるんすぎるマシュマロアイス(Too plump marshmallow ice cream in Japan)》<img src='https://images.pexels.com/photos/7539498/pexels-photo-7539498.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'></img>"
+    }else{
+        pageName = "未取得符合 id 網址 ！"
     }
    res.end(pageName)
 });
