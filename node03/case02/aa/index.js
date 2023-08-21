@@ -21,3 +21,7 @@ function sayCountry() {
 
 exports.sayName = sayName;
 exports.sayCountry = sayCountry;
+console.log(sayName())
+//必須是同名
+
+
