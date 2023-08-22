@@ -9,5 +9,7 @@
 //hw
 const moment = require('moment'); 
 let nowTime=moment().format("YYYY年MM月DD日 HH時mm分ss秒"); 
+//format格式化輸出
+// 可搭配moment一起使用
 
 console.log(`時間: ${nowTime}`)
