@@ -1,7 +1,9 @@
 const express = require('express');
 const moment = require('moment')
+const multer = require("multer");
 const connection = require("../db")
 const router = express.Router();
+const upload = multer();
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -39,7 +41,7 @@ router.get('/d/:date', async (req, res, next) => {
 
 router.post('/', (req, res, next) => {
     // res.send('寫入 指定日期的消費');
-    console.log(req.body);
+    // console.log(req.body);
     let title = req.body.title;
     let money = parseInt(req.body.money);
     let sort = parseInt(req.body.sort)
@@ -60,19 +62,86 @@ router.post('/', (req, res, next) => {
     )
 });
 
-router.put('/', (req, res) => {
-    res.json({message: '修改 指定日期的消費'});
+router.put('/', upload.none(), async (req, res) => {
+    console.log(req.body)
+    //修改預設送到req.body
+    //output:{}=>內容無法讀取
+    //npm i multer
+    // res.json({ message: '修改 指定日期的消費' });
+    let result = await updateData(req.body).
+        then((data) => {
+            return 1;
+            //成功
+        }).catch((error) => {
+            return 0;
+            // 失敗
+        })
+        res.json({result})
 });
 
-router.delete('/', (req, res) => {
-    res.json({message: '刪除 指定日期的消費'});
+router.delete('/', upload.none(), async(req, res) => {
+    // res.json({ message: '刪除 指定日期的消費' });
+    let result = await deleteData(req.body).
+        then((data) => {
+            return 1;
+            //成功
+        }).catch((error) => {
+            return 0;
+            // 失敗
+        })
+        res.json({result})
 });
 
 module.exports = router;
 
-// function setData(){
-//INSERT INTO `expense` (`id`, `title`, `sort`, `money`, `date`) VALUES ('', '草莓三明治', '1', '45', '2023-08-21');
-// }
+function deleteData(data) {
+    let title = data.title;
+    let sort = parseInt(data.sort);
+    let money = parseInt(data.money);
+    let id = parseInt(data.id);
+    return new Promise((resolve, reject) => {
+        connection.execute(
+            // 公式:
+            // "SQL",
+            // [],
+            // ()=>{}
+            "DELETE FROM expense WHERE `expense`.`id` = ?",
+            [id],
+            (error, results) => {
+                if (error) {
+                    reject(error);
+                    return false;
+                }
+                resolve(results);
+            }
+        );
+    })
+}
+
+
+function updateData(data) {
+    let title = data.title;
+    let sort = parseInt(data.sort);
+    let money = parseInt(data.money);
+    let id = parseInt(data.id);
+    return new Promise((resolve, reject) => {
+        connection.execute(
+            // 公式:
+            // "SQL",
+            // [],
+            // ()=>{}
+            "UPDATE `expense` SET `title` = ?, `sort` = ?, `money` = ? WHERE `expense`.`id` = ?",
+            [title, sort, money, id],
+            (error, results) => {
+                if (error) {
+                    reject(error);
+                    return false;
+                }
+                resolve(results);
+            }
+        );
+    })
+}
 
 function getDateData(date) {
     return new Promise((resolve, reject) => {

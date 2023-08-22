@@ -66,7 +66,8 @@
       <button type="button" class="btn-close ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-      <form action="/expe" method="post">
+
+      <form name="edited" action="/expe" method="post">
         <div class="input-group input-group-lg mb-2">
           <span class="input-group-text">消費內容</span>
           <input type="text" class="form-control" name="title">
@@ -130,6 +131,13 @@
         return response.json()
       }).then((result) => {
         console.log(result)
+        if (result.result === 1) {
+          let date = document.edited.date.value;
+          console.log(date)
+          window.location.href = "/expe/d/" + date;
+        } else {
+          alert("錯誤發生，請洽管理人員");
+        }
       }).catch((error) => {
         console.log(error)
       })
@@ -149,15 +157,22 @@
         return response.json()
       }).then((result) => {
         console.log(result)
+        if (result.result === 1) {
+          let date = document.edited.date.value;
+          console.log(date)
+          window.location.href = "/expe/d/" + date;
+        } else {
+          alert("錯誤發生，請洽管理人員");
+        }
       }).catch((error) => {
         console.log(error)
       })
     });
-  
+
 
     lists.forEach(list => {
       list.addEventListener("click", (e) => {
-        let id = e.currentTarget.getAttribute("id");
+        let id = e.currentTarget.getAttribute("idn");
         let title = e.currentTarget.getAttribute("title");
         let sort = e.currentTarget.getAttribute("sort");
         let money = e.currentTarget.getAttribute("money");
